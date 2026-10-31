@@ -4,10 +4,15 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "manifestguard"
-version = "1.6.27"
-description = "Public bootstrap installer for the protected ManifestGuard release payload"
+version = "1.6.46.post6"
+description = "Free ManifestGuard. Validates local manifests and does not include Pro commands."
 readme = "README.md"
 requires-python = ">=3.10"
+dependencies = [
+    "click>=8.1.0",
+    "packaging>=23.0",
+    "tomli>=2.0.1; python_version<'3.11'"
+]
 license = { text = "Proprietary" }
 authors = [
     { name = "Nejat Philip Eryigit", email = "info@ready-4-it.com" }
@@ -15,7 +20,7 @@ authors = [
 maintainers = [
     { name = "Nejat Philip Eryigit", email = "info@ready-4-it.com" }
 ]
-keywords = ["manifestguard", "bootstrap", "installer", "release"]
+keywords = ["manifestguard", "free"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
@@ -29,12 +34,11 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/timejunky/r4it_mgpy_release"
-Repository = "https://github.com/timejunky/r4it_mgpy_release"
-Issues = "https://github.com/timejunky/r4it_mgpy_release/issues"
+Homepage = "https://www.ready-4-it.com/mgpy"
+Repository = "https://github.com/timejunky/r4it_mgpy_public"
 
 [project.scripts]
-manifestguard = "manifestguard_bootstrap.cli:main"
+manifestguard = "manifestguard.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

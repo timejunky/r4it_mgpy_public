@@ -29,6 +29,7 @@
     "security"
   ],
   "ignorePatterns": [
+    "**/.clutchpoint_history/**",
     ".git/**",
     ".manifestguard/**",
     ".mgpy/cache/**",
