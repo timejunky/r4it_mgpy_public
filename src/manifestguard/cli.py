@@ -7,11 +7,13 @@ This module validates local manifests. It does not download a protected wheel.
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 
 import click
 
 from manifestguard import __version__
+from manifestguard.free_beacon import note_free_run
 from manifestguard.validation.base import DiagnosticSeverity
 from manifestguard.validation.entry_points import EntryPointValidator
 from manifestguard.validation.pyproject_validator import PyprojectValidator
@@ -70,6 +72,11 @@ def cli(ctx: click.Context, version: bool) -> None:
         click.echo(_ABOUT, nl=False)
 
 
+@cli.command("beacon-uninstall", hidden=True)
+def beacon_uninstall_command() -> None:
+    """Send a best-effort uninstall count. The main entry already posted it."""
+
+
 @cli.command("about")
 def about_command() -> None:
     """Show the Free edition and where Pro comes from."""
@@ -84,9 +91,21 @@ def check_command(path: Path | None) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
-    """Run the Free command."""
+    """Run the Free command.
+
+    The console script calls ``main()`` with no list. ``None`` means the
+    process arguments. An explicit list is for tests.
+    """
+    args = sys.argv[1:] if argv is None else list(argv)
+    if args[:1] == ["beacon-uninstall"]:
+        note_free_run(__version__, event="uninstall")
+    else:
+        note_free_run(__version__)
     try:
-        cli.main(args=list(argv or []), prog_name="manifestguard", standalone_mode=False)
+        cli.main(args=args, prog_name="manifestguard", standalone_mode=False)
+    except click.ClickException as exc:
+        exc.show()
+        return int(exc.exit_code or 2)
     except SystemExit as exc:
         code = exc.code
         if code in (None, 0):

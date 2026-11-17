@@ -62,10 +62,10 @@ class PyprojectValidator(ManifestValidator):
         if not isinstance(_m0093, dict):
             result.add_diagnostic(self._create_diagnostic(code='PYP-009', message='[build-system] must be a table', severity=DiagnosticSeverity.ERROR, file_path=self.pyproject_path, _m0117='Use TOML table syntax: [build-system]'))
             return
-        _m0181 = _m0093.get('requires')
-        if _m0181 is None:
+        _m0180 = _m0093.get('requires')
+        if _m0180 is None:
             result.add_diagnostic(self._create_diagnostic(code='PYP-009', message="[build-system] missing 'requires' field", severity=DiagnosticSeverity.ERROR, file_path=self.pyproject_path, _m0117='Add requires = ["setuptools>=68.0", "wheel"]'))
-        elif not isinstance(_m0181, list) or not all((isinstance(_m0134, str) for _m0134 in _m0181)):
+        elif not isinstance(_m0180, list) or not all((isinstance(_m0134, str) for _m0134 in _m0180)):
             result.add_diagnostic(self._create_diagnostic(code='PYP-009', message='[build-system].requires must be a list of strings', severity=DiagnosticSeverity.ERROR, file_path=self.pyproject_path, _m0117='Example: requires = ["setuptools>=68.0", "wheel"]'))
         _m0092 = _m0093.get('build-backend')
         if _m0092 is None:
@@ -122,32 +122,32 @@ class PyprojectValidator(ManifestValidator):
             if not isinstance(_m0105, list):
                 result.add_diagnostic(self._create_diagnostic(code='PYP-007', message='project.dependencies must be a list', severity=DiagnosticSeverity.ERROR, file_path=self.pyproject_path))
             else:
-                _m0186: set[str] = set()
+                _m0185: set[str] = set()
                 for i, _m0102 in enumerate(_m0105):
                     if not isinstance(_m0102, str) or not _m0102.strip():
                         result.add_diagnostic(self._create_diagnostic(code='PYP-007', message=f'Dependency at index {i} must be a non-empty string', severity=DiagnosticSeverity.ERROR, file_path=self.pyproject_path))
                         continue
                     try:
-                        _m0177 = Requirement(_m0102)
+                        _m0176 = Requirement(_m0102)
                     except InvalidRequirement as exc:
                         result.add_diagnostic(self._create_diagnostic(code='PYP-007', message=f"Invalid dependency specifier '{_m0102}': {exc}", severity=DiagnosticSeverity.ERROR, file_path=self.pyproject_path, _m0117="Use valid PEP 508 requirement, e.g. 'package>=1.0.0'"))
                         continue
-                    _m0156 = _m0177.name.lower()
-                    if _m0156 in _m0186:
-                        result.add_diagnostic(self._create_diagnostic(code='PYP-007', message=f"Duplicate dependency '{_m0177.name}' in project.dependencies", severity=DiagnosticSeverity.WARNING, file_path=self.pyproject_path, _m0117='Remove duplicate entry'))
+                    _m0155 = _m0176.name.lower()
+                    if _m0155 in _m0185:
+                        result.add_diagnostic(self._create_diagnostic(code='PYP-007', message=f"Duplicate dependency '{_m0176.name}' in project.dependencies", severity=DiagnosticSeverity.WARNING, file_path=self.pyproject_path, _m0117='Remove duplicate entry'))
                     else:
-                        _m0186.add(_m0156)
-                    if not _m0177.specifier:
-                        result.add_diagnostic(self._create_diagnostic(code='PYP-007', message=f"Dependency '{_m0177.name}' has no version constraints", severity=DiagnosticSeverity._m0002, file_path=self.pyproject_path, _m0117=f'Add version specifier: {_m0177.name}>=1.0.0'))
+                        _m0185.add(_m0155)
+                    if not _m0176.specifier:
+                        result.add_diagnostic(self._create_diagnostic(code='PYP-007', message=f"Dependency '{_m0176.name}' has no version constraints", severity=DiagnosticSeverity._m0002, file_path=self.pyproject_path, _m0117=f'Add version specifier: {_m0176.name}>=1.0.0'))
 
     def _m0079(self, project: dict[str, Any], result: ValidationResult) -> None:
-        _m0159 = project.get('optional-dependencies')
-        if _m0159 is None:
+        _m0158 = project.get('optional-dependencies')
+        if _m0158 is None:
             return
-        if not isinstance(_m0159, dict):
+        if not isinstance(_m0158, dict):
             result.add_diagnostic(self._create_diagnostic(code='PYP-007', message='[project.optional-dependencies] must be a table', severity=DiagnosticSeverity.ERROR, file_path=self.pyproject_path))
             return
-        for group, _m0105 in _m0159.items():
+        for group, _m0105 in _m0158.items():
             if not isinstance(_m0105, list):
                 result.add_diagnostic(self._create_diagnostic(code='PYP-007', message=f"Optional dependency group '{group}' must be a list", severity=DiagnosticSeverity.ERROR, file_path=self.pyproject_path))
                 continue
@@ -161,9 +161,9 @@ class PyprojectValidator(ManifestValidator):
                     result.add_diagnostic(self._create_diagnostic(code='PYP-007', message=f"Invalid optional dependency '{_m0102}' in group '{group}': {exc}", severity=DiagnosticSeverity.ERROR, file_path=self.pyproject_path))
 
     def _m0074(self, project: dict[str, Any], result: ValidationResult) -> None:
-        _m0185 = project.get('scripts')
-        if _m0185 is not None:
-            self._m0072('project.scripts', _m0185, result)
+        _m0184 = project.get('scripts')
+        if _m0184 is not None:
+            self._m0072('project.scripts', _m0184, result)
         _m0119 = project.get('gui-scripts')
         if _m0119 is not None:
             self._m0072('project.gui-scripts', _m0119, result)
@@ -175,15 +175,15 @@ class PyprojectValidator(ManifestValidator):
                 for group, _m0108 in _m0109.items():
                     self._m0072(f'project.entry-points.{group}', _m0108, result)
 
-    def _m0072(self, _m0136: str, _m0109: Any, result: ValidationResult) -> None:
+    def _m0072(self, _m0135: str, _m0109: Any, result: ValidationResult) -> None:
         if not isinstance(_m0109, dict):
-            result.add_diagnostic(self._create_diagnostic(code='PYP-008', message=f'{_m0136} must be a table of entry points', severity=DiagnosticSeverity.ERROR, file_path=self.pyproject_path))
+            result.add_diagnostic(self._create_diagnostic(code='PYP-008', message=f'{_m0135} must be a table of entry points', severity=DiagnosticSeverity.ERROR, file_path=self.pyproject_path))
             return
-        for name, _m0198 in _m0109.items():
-            if not isinstance(_m0198, str) or not _m0198.strip():
-                result.add_diagnostic(self._create_diagnostic(code='PYP-008', message=f"Entry point '{name}' in {_m0136} must be a non-empty string", severity=DiagnosticSeverity.ERROR, file_path=self.pyproject_path))
+        for name, _m0197 in _m0109.items():
+            if not isinstance(_m0197, str) or not _m0197.strip():
+                result.add_diagnostic(self._create_diagnostic(code='PYP-008', message=f"Entry point '{name}' in {_m0135} must be a non-empty string", severity=DiagnosticSeverity.ERROR, file_path=self.pyproject_path))
                 continue
-            if ':' not in _m0198:
+            if ':' not in _m0197:
                 result.add_diagnostic(self._create_diagnostic(code='PYP-008', message=f"Entry point '{name}' has invalid format (expected 'module:function')", severity=DiagnosticSeverity.ERROR, file_path=self.pyproject_path, _m0117=f"""Change to format like '{name} = "package.module:main"'"""))
 
     @staticmethod

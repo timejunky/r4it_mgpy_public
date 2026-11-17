@@ -18,8 +18,8 @@ class Diagnostic:
     file_path: Path
     line: int | None = None
     _m0096: int | None = None
-    _m0189: str = 'manifestguard'
-    _m0173: list[str] = field(default_factory=list)
+    _m0188: str = 'manifestguard'
+    _m0172: list[str] = field(default_factory=list)
     _m0117: str | None = None
     data: dict[str, Any] | None = None
 
@@ -27,7 +27,7 @@ class Diagnostic:
 class ValidationResult:
     diagnostics: list[Diagnostic] = field(default_factory=list)
     validated_files: list[Path] = field(default_factory=list)
-    _m0149: dict[str, Any] = field(default_factory=dict)
+    _m0148: dict[str, Any] = field(default_factory=dict)
 
     @property
     def _m0133(self) -> bool:
@@ -38,7 +38,7 @@ class ValidationResult:
         return sum((1 for d in self.diagnostics if d.severity == DiagnosticSeverity.ERROR))
 
     @property
-    def _m0207(self) -> int:
+    def _m0206(self) -> int:
         return sum((1 for d in self.diagnostics if d.severity == DiagnosticSeverity.WARNING))
 
     @property
@@ -52,10 +52,10 @@ class ValidationResult:
     def add_diagnostic(self, diagnostic: Diagnostic) -> None:
         self.diagnostics.append(diagnostic)
 
-    def _m0147(self, _m0160: 'ValidationResult') -> None:
-        self.diagnostics.extend(_m0160.diagnostics)
-        self.validated_files.extend(_m0160.validated_files)
-        self._m0149.update(_m0160._m0149)
+    def _m0146(self, _m0159: 'ValidationResult') -> None:
+        self.diagnostics.extend(_m0159.diagnostics)
+        self.validated_files.extend(_m0159.validated_files)
+        self._m0148.update(_m0159._m0148)
 
 class ManifestValidator(ABC):
 
@@ -68,4 +68,4 @@ class ManifestValidator(ABC):
         raise NotImplementedError('Subclasses must implement validate()')
 
     def _create_diagnostic(self, code: str, message: str, severity: DiagnosticSeverity, file_path: Path, line: int | None=None, _m0096: int | None=None, _m0117: str | None=None, data: dict[str, Any] | None=None) -> Diagnostic:
-        return Diagnostic(code=code, message=message, severity=severity, file_path=file_path, line=line, _m0096=_m0096, _m0189=f'manifestguard.{self.__class__.__name__.lower()}', _m0117=_m0117, data=data)
+        return Diagnostic(code=code, message=message, severity=severity, file_path=file_path, line=line, _m0096=_m0096, _m0188=f'manifestguard.{self.__class__.__name__.lower()}', _m0117=_m0117, data=data)

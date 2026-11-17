@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "manifestguard"
-version = "1.6.46.post6"
+version = "1.6.46.post9"
 description = "Free ManifestGuard. Validates local manifests and does not include Pro commands."
 readme = "README.md"
 requires-python = ">=3.10"
